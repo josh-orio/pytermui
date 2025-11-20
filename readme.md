@@ -13,7 +13,7 @@ Then in python, import using:
 import pytermui
 ```
 
-To simply get a feel of the library, you can run ```make test```. Note that a path is added, this is the location in the build dir where the library is stored, it is not available systemwide.
+To simply get a feel of the library, you can run ```make test```. Note that a path is added in bind_test.py, this is the location in the build dir where the library is stored, it is not available systemwide.
 
 ### Usage
 
