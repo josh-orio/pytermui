@@ -5,19 +5,18 @@ BUILD_DIR := build
 all: test
 
 bind:
-	@mkdir -p $(BUILD_DIR)
-	@cd $(BUILD_DIR) && \
-	cmake -DCMAKE_BUILD_TYPE=Debug \
-	-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-	-DBUILD_EXAMPLES=OFF \
-	-DPYBIND=ON .. && \
-	$(MAKE) -j
+	@cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .
+	@make -C build -j
 
 test:
+	@cp build/bindings/pytermui*.so pytermui/
+
+	@if [ ! -d "venv" ]; then python3 -m venv venv; fi; \
+	. venv/bin/activate; \
+	pip install --upgrade pip; \
+	pip install build; \
+	python3 -m build; \
 	python3 bind_test.py
 
-install:
-	@echo "not implemented!"
-
 clean:
-	@rm -rf $(BUILD_DIR) .cache
+	@rm -rf $(BUILD_DIR) .cache venv

@@ -6,14 +6,7 @@ Python binding for TermUI library.
 
 ### Get Started
 
-To build and install the library, run ```make install```.
 
-Then in python, import using:
-```python3
-import pytermui
-```
-
-To simply get a feel of the library, you can run ```make test```. Note that a path is added in bind_test.py, this is the location in the build dir where the library is stored, it is not available systemwide.
 
 ### Usage
 

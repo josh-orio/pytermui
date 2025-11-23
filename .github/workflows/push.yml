@@ -1,0 +1,14 @@
+name: Pybind test
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run build test
+        run: |
+          cmake -B build .
+          make -C build -j

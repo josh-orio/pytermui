@@ -1,6 +1,3 @@
-import sys
-sys.path.append("build/bindings")
-
 import pytermui
 
 t = pytermui.Strings(["Ketchup", "Mustard", "BBQ"])
