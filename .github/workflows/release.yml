@@ -1,6 +1,8 @@
 name: Build Wheels
 
 on:
+  push:
+    branches: [ main ]
   release:
     types: [published]
 
@@ -21,9 +23,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Build pybind of TermUI
-        run: make bind
-
       - name: Install build tools
         run: |
           python -m pip install --upgrade pip
@@ -43,23 +42,47 @@ jobs:
       - name: Upload wheels to artifact store
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-${{ matrix.os }}
           path: dist/*.whl
 
   upload-release-assets:
     name: Upload wheels to release
     runs-on: ubuntu-latest
     needs: build-wheels
+    if: github.event_name == 'release'
 
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: wheels
-          path: wheels
+    - name: Download all built artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./dist
 
-      - name: Upload to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: wheels/*.whl
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Show downloaded wheels
+      run: |
+        echo "wheels found:"
+        find ./dist -type f -name "*.whl" -print
+
+    - name: Upload wheels to GitHub release
+      uses: softprops/action-gh-release@v1
+      with:
+        # match wheels wherever they landed after download
+        files: dist/**/*.whl
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # steps:
+    #   - uses: actions/download-artifact@v4
+    #     with:
+    #       name: wheels-ubuntu-latest
+    #       path: wheels/ubuntu
+    #   - uses: actions/download-artifact@v4
+    #     with:
+    #       name: wheels-macos-latest
+    #       path: wheels/macos
+
+    #   - name: Upload to GitHub Release
+    #     uses: softprops/action-gh-release@v2
+    #     with:
+    #       files: wheels/ubuntu/*.whl wheels/macos/*.whl
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
