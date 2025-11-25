@@ -11,7 +11,10 @@ void bind_console(py::module_ &m) {
       .def("off", &termui::BufferModeToggle::off)
       .def("on", &termui::BufferModeToggle::on);
 
-  py::class_<termui::EchoModeToggle>(m, "EchoModeToggle").def(py::init<>()).def("off", &termui::EchoModeToggle::off).def("on", &termui::EchoModeToggle::on);
+  py::class_<termui::EchoModeToggle>(m, "EchoModeToggle")
+      .def(py::init<>())
+      .def("off", &termui::EchoModeToggle::off)
+      .def("on", &termui::EchoModeToggle::on);
 
   py::class_<termui::CursorModeToggle>(m, "CursorModeToggle")
       .def(py::init<>())
@@ -38,17 +41,19 @@ void bind_console(py::module_ &m) {
       .value("MOVE", termui::MouseEventType::MOVE);
 
   py::class_<termui::MouseInteraction>(m, "MouseInteraction")
-      .def(py::init<std::string>())
+      .def(py::init<std::string>(), py::arg("str"))
       .def_readwrite("valid", &termui::MouseInteraction::valid)
       .def_readwrite("col", &termui::MouseInteraction::col)
       .def_readwrite("row", &termui::MouseInteraction::row)
       .def_readwrite("event", &termui::MouseInteraction::event)
-      .def("match", py::overload_cast<termui::MouseEventType>(&termui::MouseInteraction::match))
-      .def("match", py::overload_cast<termui::MouseEventType, size_t, size_t, size_t, size_t>(&termui::MouseInteraction::match));
+      .def("match", py::overload_cast<termui::MouseEventType>(&termui::MouseInteraction::match), py::arg("event_type"))
+      .def("match",
+           py::overload_cast<termui::MouseEventType, size_t, size_t, size_t, size_t>(&termui::MouseInteraction::match),
+           py::arg("event_type"), py::arg("x1"), py::arg("x2"), py::arg("y1"), py::arg("y2"));
 
   py::class_<termui::Console>(m, "Console")
-      .def(py::init<bool, bool, bool, bool, bool>(), py::arg("buffered") = false, py::arg("echos") = false, py::arg("cursor") = false, py::arg("alt") = true,
-           py::arg("mouse") = true)
+      .def(py::init<bool, bool, bool, bool, bool>(), py::arg("buffered") = false, py::arg("echos") = false,
+           py::arg("cursor") = false, py::arg("alt") = true, py::arg("mouse") = true)
       .def_readwrite("width", &termui::Console::width)
       .def_readwrite("height", &termui::Console::height)
       .def_readwrite("outbuff", &termui::Console::outbuff)
@@ -60,11 +65,12 @@ void bind_console(py::module_ &m) {
       .def("show", &termui::Console::show)
       .def("close", &termui::Console::close)
       .def("update_size", &termui::Console::update_size)
-      .def("print", py::overload_cast<int, int, std::string>(&termui::Console::print))
-      .def("print", py::overload_cast<std::string>(&termui::Console::print))
+      .def("print", py::overload_cast<int, int, std::string>(&termui::Console::print), py::arg("row"),
+           py::arg("column"), py::arg("string"))
+      .def("print", py::overload_cast<std::string>(&termui::Console::print), py::arg("string"))
       .def("clear_outbuff", &termui::Console::clear_outbuff)
       .def("clear_screen", &termui::Console::clear_screen)
       .def("clear_scrollback", &termui::Console::clear_scrollback)
-      .def("flush", &termui::Console::flush, py::arg("s_clr") = true, py::arg("sb_clr") = true)
+      .def("flush", &termui::Console::flush, py::arg("clear_screen") = true, py::arg("clear_scrollback") = true)
       .def("poll_input", &termui::Console::poll_input);
 }
