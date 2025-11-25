@@ -2,9 +2,11 @@ name: Build Wheels
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - '*'
   release:
-    types: [published]
+    types:
+      - published
 
 jobs:
   build-wheels:
