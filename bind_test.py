@@ -6,3 +6,5 @@ m = pytermui.Menu("Sauce", t, 1)
 m.show()
 
 pytermui.Menu("Sauce", t, 0).show()
+
+pytermui.Menu("Sauce", t).show() # optional arg now supported
