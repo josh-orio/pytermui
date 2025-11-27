@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include <str.hpp>
+#include <termui/str.hpp>
 
 namespace py = pybind11;
 

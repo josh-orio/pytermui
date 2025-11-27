@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include <console.hpp>
+#include <termui/console.hpp>
 
 namespace py = pybind11;
 

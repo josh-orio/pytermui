@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include <interfaces.hpp>
+#include <termui/interfaces.hpp>
 
 namespace py = pybind11;
 

@@ -1,6 +1,6 @@
 #include <pybind11/pybind11.h>
 
-#include <termui.hpp>
+#include <termui/termui.hpp>
 
 namespace py = pybind11;
 
