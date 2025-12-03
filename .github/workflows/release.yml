@@ -30,6 +30,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install build scikit-build-core pybind11
 
+      - name: Set version
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            # (release) strip "refs/tags/v"
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            # (dev branch) build with a fallback version num
+            VERSION="0.1.0"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Inject versioning info (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: sed -i "s/0.0.0/$VERSION/" pyproject.toml
+
+      - name: Inject versioning info (Mac)
+        if: matrix.os == 'macos-latest'
+        run: sed -i '' "s/0.0.0/$VERSION/" pyproject.toml
+
       - name: Build wheel
         run: python -m build --wheel --outdir dist
 
@@ -71,20 +90,3 @@ jobs:
         files: dist/**/*.whl
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    # steps:
-    #   - uses: actions/download-artifact@v4
-    #     with:
-    #       name: wheels-ubuntu-latest
-    #       path: wheels/ubuntu
-    #   - uses: actions/download-artifact@v4
-    #     with:
-    #       name: wheels-macos-latest
-    #       path: wheels/macos
-
-    #   - name: Upload to GitHub Release
-    #     uses: softprops/action-gh-release@v2
-    #     with:
-    #       files: wheels/ubuntu/*.whl wheels/macos/*.whl
-    #     env:
-    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
