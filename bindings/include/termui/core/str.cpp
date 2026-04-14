@@ -123,6 +123,9 @@ void bind_str(py::module_ &m) {
         out += "])";
         return out;
       });
+
+  py::implicitly_convertible<std::string, termui::string>(); // these allow python strings to implictly convert to termui::string
+  py::implicitly_convertible<const char *, termui::string>();
 }
 
 // #include <pybind11/cast.h>
