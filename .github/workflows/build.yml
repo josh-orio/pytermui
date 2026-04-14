@@ -1,8 +1,7 @@
-name: Build Release Artifacts
+name: Build Wheels
 
 on:
-  release:
-    types: [published]
+  push
 
 jobs:
   build-wheels:
@@ -29,11 +28,9 @@ jobs:
       - name: Set version
         run: |
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
-            # (release) strip "refs/tags/v"
-            VERSION="${GITHUB_REF#refs/tags/v}"
+            VERSION="${GITHUB_REF#refs/tags/v}" # (release) strip "refs/tags/v"
           else
-            # (dev branch) build with a fallback version num
-            VERSION="0.1.0"
+            VERSION="0.0.0" # (dev branch) build with a fallback version num
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
@@ -55,34 +52,3 @@ jobs:
           for whl in dist/*.whl; do
             auditwheel repair "$whl" -w dist/
           done
-
-      - name: Upload wheels to artifact store
-        uses: actions/upload-artifact@v4
-        with:
-          name: wheels-${{ matrix.os }}
-          path: dist/*.whl
-
-  upload-release-assets:
-    name: Upload wheels to release
-    runs-on: ubuntu-latest
-    needs: build-wheels
-    if: github.event_name == 'release'
-
-    steps:
-    - name: Download all built artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: ./dist
-
-    - name: Show downloaded wheels
-      run: |
-        echo "wheels found:"
-        find ./dist -type f -name "*.whl" -print
-
-    - name: Upload wheels to GitHub release
-      uses: softprops/action-gh-release@v1
-      with:
-        # match wheels wherever they landed after download
-        files: dist/**/*.whl
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,6 +2,11 @@
 
 Python binding for [TermUI](https://github.com/josh-orio/termui) library.
 
+These binds are written entirely by Claude or Ollama models because I'm not porting 30+ header files by hand. I check the output and if CI passes that's "good enough".
+
+[![CI](https://github.com/josh-orio/pytermui/actions/workflows/release.yml/badge.svg)](https://github.com/josh-orio/pytermui/actions/workflows/release.yml)
+
+
 ### Get Started
 
 There are multiple ways to use this binding:
@@ -27,4 +32,4 @@ The API for PyTermui is very similar to the CPP version. Methods that return ptr
 
 In addition constructors and functions that would have optional arguments in the C++ library, are currently all mandatory.
 
-To understand which interfaces and elements are shipped with TermUI, visit the [docs](https://github.com/josh-orio/termui).
+To understand which interfaces and elements are shipped with TermUI, visit the [docs](https://github.com/josh-orio/termui/tree/main/docs/).
