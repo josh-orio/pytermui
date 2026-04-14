@@ -7,7 +7,7 @@ include(FetchContent)
 FetchContent_Declare(
     termui
     GIT_REPOSITORY https://github.com/josh-orio/termui.git
-    GIT_TAG        main 
+    GIT_TAG        main
 )
 FetchContent_MakeAvailable(termui)
 
@@ -19,7 +19,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(pybind11)
 
-file(GLOB SOURCES "bindings/*.cpp")
+file(GLOB_RECURSE SOURCES "bindings/*.cpp")
 
 pybind11_add_module(pytermui ${SOURCES})
 target_link_libraries(pytermui PRIVATE termui)

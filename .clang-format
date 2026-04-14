@@ -1,3 +1,11 @@
 BasedOnStyle: LLVM
 IndentWidth: 2
 ColumnLimit: 160
+
+AlignConsecutiveDeclarations: Consecutive
+
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  
