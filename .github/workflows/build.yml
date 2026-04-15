@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-wheels:
-    name: Build wheels (${{ matrix.os }})
+    name: Build wheel ${{ matrix.os }} ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -16,39 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install build tools
-        run: |
-          python -m pip install --upgrade pip
-          pip install build scikit-build-core pybind11
-
-      - name: Set version
-        run: |
-          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
-            VERSION="${GITHUB_REF#refs/tags/v}" # (release) strip "refs/tags/v"
-          else
-            VERSION="0.0.0" # (dev branch) build with a fallback version num
-          fi
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Inject versioning info (Ubuntu)
-        if: matrix.os == 'ubuntu-latest'
-        run: sed -i "s/0.0.0/$VERSION/" pyproject.toml
-
-      - name: Inject versioning info (Mac)
-        if: matrix.os == 'macos-latest'
-        run: sed -i '' "s/0.0.0/$VERSION/" pyproject.toml
-
-      - name: Build wheel
-        run: python -m build --wheel --outdir dist
-
-      - name: Repair Linux wheels
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          pip install auditwheel
-          for whl in dist/*.whl; do
-            auditwheel repair "$whl" -w dist/
-          done
+      - run: uv build --python ${{ matrix.python-version }}
