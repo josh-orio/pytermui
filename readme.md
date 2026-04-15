@@ -4,32 +4,41 @@ Python binding for [TermUI](https://github.com/josh-orio/termui) library.
 
 These binds are written entirely by Claude or Ollama models because I'm not porting 30+ header files by hand. I check the output and if CI passes that's "good enough".
 
-[![CI](https://github.com/josh-orio/pytermui/actions/workflows/release.yml/badge.svg)](https://github.com/josh-orio/pytermui/actions/workflows/release.yml)
+[![CI](https://github.com/josh-orio/pytermui/actions/workflows/build.yml/badge.svg)](https://github.com/josh-orio/pytermui/actions/workflows/build.yml)
 
 
 ### Get Started
 
+> This project is designed to work with [uv](https://docs.astral.sh/uv/).
+
 There are multiple ways to use this binding:
 
-1. Check [Releases](https://github.com/josh-orio/pytermui/releases), there may already be a compiled wheel for your system/pyversion.
+1. The easiest way is ```uv add termuipy```, 'pytermui' was sadly taken.
 
-    You'll be able to "pip install ${WHL_URL}" or add the URL to a requirements.txt.
-
-2. Build a wheel yourself.
+2. Alternatively, you may need to build your own:
 
     ```bash
-    pip install --upgrade build
-    python -m build
+    gh repo clone josh-orio/pytermui
+    cd pytermui
+    uv build
     ```
 
-    Will build a wheel and leave it in dist/, which you can then install or distribute yourself.
+    uv will build the project and leave a .whl in dist/
+
+    To use this wheel, you will need a layout like so:
+    ```
+    |- pytermui/
+    |  |- __init__.py
+    |  |- *.whl
+    |- main.py
+    ```
+
+    The init file will need to match [this one.](pytermui/__init__.py)
 
 The installed library is imported using ```import pytermui```.
 
 ### Usage
 
-The API for PyTermui is very similar to the CPP version. Methods that return ptrs and smart ptrs are not pybound at present.
+The API for PyTermui tries to replicate the CPP version as close as possible.
 
-In addition constructors and functions that would have optional arguments in the C++ library, are currently all mandatory.
-
-To understand which interfaces and elements are shipped with TermUI, visit the [docs](https://github.com/josh-orio/termui/tree/main/docs/).
+To learn more, visit the [docs](https://github.com/josh-orio/termui/tree/main/docs/).

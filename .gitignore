@@ -8,3 +8,6 @@ __pycache__
 dist
 
 **/*.hpp
+
+.python-version
+uv.lock
