@@ -5,6 +5,7 @@ build-backend = "scikit_build_core.build"
 [project]
 name = "termuipy"
 version = "2.0.0" # uv fills this in CI
+readme = "readme.md"
 requires-python = ">=3.13"
 
 [tool.scikit-build]
