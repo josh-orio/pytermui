@@ -25,7 +25,7 @@ jobs:
         run: |
           VERSION="${GITHUB_REF#refs/tags/v}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          uv version $VERSION
+          uv version $VERSION --no-sync
 
       - run: uv build --python ${{ matrix.python-version }}
 
