@@ -59,7 +59,7 @@ jobs:
 
       - run: ls -R dist
 
-      - uses: astral-sh/setup-uv@v1
+      - uses: astral-sh/setup-uv@v5
       - run: uv publish dist/**/*
 
       # - run: uv publish
