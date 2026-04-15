@@ -1,10 +1,12 @@
 import pytermui
 
-t = pytermui.Strings(["Ketchup", "Mustard", "BBQ"])
+t = pytermui.strings(["Ketchup", "Mustard", "BBQ"])
 
-m = pytermui.Menu("Sauce", t, 1)
+title = pytermui.string("Sauce")
+
+m = pytermui.Menu(title, t, 1)
 m.show()
 
 pytermui.Menu("Sauce", t, 0).show()
 
-pytermui.Menu("Sauce", t).show() # optional arg now supported
+pytermui.Menu("Sauce", t).show() # optional arg supported
