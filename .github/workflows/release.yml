@@ -38,33 +38,35 @@ jobs:
             rm "$whl" # only ship the manylinux version
           done
 
-      - name: Upload wheels to artifact store
-        uses: actions/upload-artifact@v4
-        with:
-          name: wheels-${{ matrix.os }}-${{ matrix.python-version }}
-          path: dist/*.whl
+      - run: uv publish
 
-  upload-release-assets:
-    name: Upload wheels to release
-    runs-on: ubuntu-latest
-    needs: build-wheels
-    if: github.event_name == 'release'
+  #     - name: Upload wheels to artifact store
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: wheels-${{ matrix.os }}-${{ matrix.python-version }}
+  #         path: dist/*.whl
 
-    steps:
-    - name: Download all built artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: ./dist
+  # upload-release-assets:
+  #   name: Upload wheels to release
+  #   runs-on: ubuntu-latest
+  #   needs: build-wheels
+  #   if: github.event_name == 'release'
 
-    - name: Show downloaded wheels
-      run: |
-        echo "wheels found:"
-        find ./dist -type f -name "*.whl" -print
+  #   steps:
+  #   - name: Download all built artifacts
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       path: ./dist
 
-    - name: Upload wheels to GitHub release
-      uses: softprops/action-gh-release@v1
-      with:
-        # match wheels wherever they landed after download
-        files: dist/**/*.whl
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #   - name: Show downloaded wheels
+  #     run: |
+  #       echo "wheels found:"
+  #       find ./dist -type f -name "*.whl" -print
+
+  #   - name: Upload wheels to GitHub release
+  #     uses: softprops/action-gh-release@v1
+  #     with:
+  #       # match wheels wherever they landed after download
+  #       files: dist/**/*.whl
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
